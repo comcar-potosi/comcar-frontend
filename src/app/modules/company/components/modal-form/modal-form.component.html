@@ -1,0 +1,102 @@
+<form [formGroup]="formCompany">
+
+  <div class="grid">
+    <div class="col-12">
+      <p-dialog [(visible)]="openModal" styleClass="w-10 md:w-6 lg:w-4" [header]="tittleForm" [modal]="true"
+        class="p-fluid">
+        <ng-template pTemplate="content">
+
+          <app-message-required-field></app-message-required-field>
+
+          <div class="form-group field mt-5">
+            <p-float-label>
+              <input type="text" pInputText id="code" formControlName="code" class="w-full" />
+              <label htmlFor="code" class="text-lg font-bold text-800 required-field"> {{ labels.code }} </label>
+            </p-float-label>
+            @if (formCompany.controls['code'].touched && formCompany.get('code')?.hasError('required')) {
+            <small class="p-error block mt-2"> {{ messages.requiredField }} </small>
+            }
+            @if (formCompany.get('code')?.hasError('pattern')) {
+            <small class="p-error block mt-2">{{ messages.deniedCharactersCode }}</small>
+            }
+            @if (formCompany.get('code')?.hasError('minlength')) {
+            <small class="p-error block mt-2">{{ messages.requiredMinLengthCode }}</small>
+            }
+            @if (formCompany.get('code')?.hasError('noSpace')) {
+            <small class="p-error block mt-2">{{ messages.noOnlySpace }}</small>
+            }
+          </div>
+
+          <div class="form-group field mt-5">
+            <p-float-label>
+              <input type="text" pInputText id="socialReason" formControlName="socialReason" class="w-full" />
+              <label htmlFor="socialReason" class="text-lg font-bold text-800 required-field"> {{ labels.name }}
+              </label>
+            </p-float-label>
+            @if (formCompany.controls['socialReason'].touched && formCompany.get('socialReason')?.hasError('required'))
+            {
+            <small class="p-error block mt-2"> {{ messages.requiredField }} </small>
+            }
+            @if (formCompany.get('socialReason')?.hasError('pattern')) {
+            <small class="p-error block mt-2">{{ messages.deniedCharactersName }}</small>
+            }
+            @if (formCompany.get('socialReason')?.hasError('minlength')) {
+            <small class="p-error block mt-2">{{ messages.requiredMinLength }}</small>
+            }
+            @if (formCompany.get('socialReason')?.hasError('noSpace')) {
+            <small class="p-error block mt-2">{{ messages.noOnlySpace }}</small>
+            }
+          </div>
+
+          <div class="form-group field mt-5">
+            <p-float-label>
+              <input type="number" pInputText id="nit" formControlName="nit" class="w-full" />
+              <label htmlFor="nit" class="text-lg font-bold text-800 required-field"> {{ labels.nit }} </label>
+            </p-float-label>
+            @if (formCompany.controls['nit'].touched && formCompany.get('nit')?.hasError('required')) {
+            <small class="p-error block mt-2"> {{ messages.requiredField }} </small>
+            }
+          </div>
+
+          <div class="form-group field mt-5">
+            <p-float-label>
+              <input type="text" pInputText id="nim" formControlName="nim" class="w-full" />
+              <label htmlFor="nim" class="text-lg font-bold text-800"> {{ labels.nim }} </label>
+            </p-float-label>
+          </div>
+
+          <div class="form-group field mt-5">
+            <p-float-label>
+              <input type="text" pInputText id="address" formControlName="address" class="w-full" />
+              <label htmlFor="address" class="text-lg font-bold text-800"> {{ labels.address }} </label>
+            </p-float-label>
+          </div>
+
+          <div class="form-group field mt-5">
+            <p-float-label>
+              <input type="number" pInputText id="cellphone" formControlName="cellphone" class="w-full" />
+              <label htmlFor="cellphone" class="text-lg font-bold text-800"> {{ labels.phone }} </label>
+            </p-float-label>
+          </div>
+
+          <div class="form-group field mt-3 ml-3 flex align-items-center">
+            <label class="text-lg font-bold text-800 mr-3 required-field">{{ labels.logo }}</label>
+            <app-input-file [mode]="modeInputFile.BASIC" [typeFileAccept]="allowedImageFormat"
+              [maxSizeAllowed]="maxImageSizeAllowed" (archivoUploaded)="loadFile($event)"
+              [file]="file"></app-input-file>
+          </div>
+
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <div class="p-2 pb-3">
+            <button type="button" pButton pRipple [label]="buttons.cancel" icon="pi pi-times" severity="secondary"
+              [rounded]="true" size="small" class="mr-2 shadow-3" (click)="hideModal()"></button>
+            <button pButton pRipple [label]="buttons.save" icon="pi pi-check" [rounded]="true" size="small"
+              class="mr-2 shadow-3 hover-primary" (click)="saveCompany()" [disabled]="formCompany.invalid">
+            </button>
+          </div>
+        </ng-template>
+      </p-dialog>
+    </div>
+  </div>
+</form>

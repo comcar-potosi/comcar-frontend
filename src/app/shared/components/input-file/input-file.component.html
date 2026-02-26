@@ -1,0 +1,36 @@
+<div [ngClass]="mode == modeInputFile.BASIC? 'form-group field flex align-items-center m-0': 'mt-3'">
+  <p-fileUpload
+    #fileUpload
+    [mode]="mode"
+    (onSelect)="loadFile($event)"
+    (onRemove)="loadFile()"
+    [multiple]="false"
+    [chooseIcon]="'pi pi-paperclip'"
+    [accept]="typeFileAccept"
+    [maxFileSize]="maxSizeAllowed"
+    [chooseLabel]="labelButton"
+    [pTooltip]="tooltips.uploadFile"
+    [tooltipDisabled]="labelButton? true: false"
+    [showUploadButton]="false"
+    [invalidFileSizeMessageSummary]="messages.invalidFileSize"
+    [invalidFileSizeMessageDetail]="messages.invalidFileSizeDetail"
+    [invalidFileTypeMessageSummary]="messages.invalidFileType"
+    [invalidFileTypeMessageDetail]="messages.invalidFileTypeDetail(typeFileAccept)"
+    [showCancelButton]="true"
+    [auto]="true"
+    [style]="{'width': 'fit-content'}"
+    chooseStyleClass="p-button-rounded shadow-3 button-message hover-primary"
+    cancelStyleClass="p-button-rounded p-button-secondary">
+  </p-fileUpload>
+  @if (mode == modeInputFile.BASIC && file) {
+    <span
+      pRipple
+      type="button"
+      [pTooltip]="tooltips.deleteFile"
+      (click)="clearFile()"
+      class="p-button p-button-sm p-button-icon-only p-button-rounded p-button-warn ml-2 fadeinup animation-duration-300 hover-warn shadow-3"
+      >
+      <span class="pi pi-times"></span>
+    </span>
+  }
+</div>

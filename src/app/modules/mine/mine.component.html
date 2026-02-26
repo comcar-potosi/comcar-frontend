@@ -1,0 +1,27 @@
+<div class="container mx-3 mb-0 pb-4">
+    <p-fieldset styleClass="sombra-black">
+        <ng-template pTemplate="header">
+            <div class="flex align-items-center text-primary fadeinleft animation-duration-400">
+                <h2 class="text-white"> {{ labels.mines }} <span class="text-sm"> Gestión de minas</span> </h2>
+            </div>
+        </ng-template>
+        <div class="grid">
+            <div class="col-12 fadeindown animation-duration-400">
+                <div class="sombra-black border-round-xl p-2 surface-0">
+                    <app-toolbar-common
+                        [serviceGeneric]="mineService" 
+                        [object]="selectedMine"/> 
+                    <app-modal-form ></app-modal-form> 
+                    <app-modal-delete [serviceGeneric]="mineService" [objectId]="selectedMine?.id"></app-modal-delete>
+                    <app-generic-table 
+                        [items]="mines"
+                        [tableColumnDefinitions]="tableColumnDefinitions"
+                        (onSelection)="setSelected($event)"
+                        (requestData)="getMines()"
+                        (selfEmitter)="onTableSelfEmision($event)"
+                    ></app-generic-table>
+                </div>
+            </div>
+        </div>
+    </p-fieldset>
+</div>

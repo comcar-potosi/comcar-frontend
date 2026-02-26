@@ -1,0 +1,85 @@
+<form [formGroup]="formLot">
+
+  <div class="grid">
+    <div class="col-12">
+      <p-dialog [(visible)]="openModal" styleClass="w-10 md:w-6" [header]="tittleForm" [modal]="true" class="p-fluid">
+        <ng-template pTemplate="content">
+
+          <app-message-required-field></app-message-required-field>
+
+          <div class="grid">
+            <div class="form-group field mt-5 col-4">
+              <p-float-label>
+                <p-select inputId="assignment" formControlName="assignment" [options]="lotAssigments | keyvalue"
+                  optionLabel="value" optionValue="key" [filter]="true" filterBy="value" styleClass="w-full"
+                  appendTo="body"></p-select>
+                <label for="assignment" class="text-lg font-bold text-800 required-field">
+                  {{ labels.lotType }}
+                </label>
+              </p-float-label>
+            </div>
+
+            <div class="form-group field mt-5 col-4">
+              <p-float-label>
+                <input type="text" pInputText id="prefix" formControlName="prefix" class="w-full" />
+                <label htmlFor="prefix" class="text-lg font-bold text-800 required-field"> {{ labels.prefix }} </label>
+              </p-float-label>
+              @if (formLot.controls['prefix'].touched && formLot.get('prefix')?.hasError('required')) {
+              <small class="p-error block mt-2"> {{ messages.requiredField }} </small>
+              }
+              @if (formLot.get('prefix')?.hasError('pattern')) {
+              <small class="p-error block mt-2">{{ messages.deniedCharactersCode }}</small>
+              }
+              @if (formLot.get('prefix')?.hasError('noSpace')) {
+              <small class="p-error block mt-2">{{ messages.noOnlySpace }}</small>
+              }
+            </div>
+
+            <div class="form-group field mt-5 col-4">
+              <p-float-label>
+                <p-inputNumber id="initialDocNumber" [useGrouping]="false" [min]="1" formControlName="initialDocNumber"
+                  styleClass="w-full" />
+                <label htmlFor="initialDocNumber" class="text-lg font-bold text-800 required-field"> {{
+                  labels.initialNumber }} </label>
+              </p-float-label>
+              @if (formLot.controls['initialDocNumber'].touched &&
+              formLot.get('initialDocNumber')?.hasError('required'))
+              {
+              <small class="p-error block mt-2"> {{ messages.requiredField }} </small>
+              }
+            </div>
+
+            <div class="form-group field mt-3 col-12">
+              <p-float-label>
+                <input type="text" pInputText id="description" formControlName="description" class="w-full" />
+                <label htmlFor="description" class="text-lg font-bold text-800 required-field"> {{ labels.description }}
+                </label>
+              </p-float-label>
+              @if (formLot.controls['description'].touched && formLot.get('description')?.hasError('required')) {
+              <small class="p-error block mt-2"> {{ messages.requiredField }} </small>
+              }
+              @if (formLot.get('description')?.hasError('noSpace')) {
+              <small class="p-error block mt-2">{{ messages.noOnlySpace }}</small>
+              }
+            </div>
+          </div>
+
+          <div class="form-group field mt-3 ml-3 flex">
+            <label htmlFor="state" class="text-lg font-bold text-800 mr-3"> {{ labels.status }} </label>
+            <p-toggleswitch formControlName="state" />
+          </div>
+
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <div class="p-2 pb-3">
+            <button type="button" pButton pRipple [label]="buttons.cancel" icon="pi pi-times" severity="secondary"
+              [rounded]="true" size="small" class="mr-2 shadow-3" (click)="hideModal()"></button>
+            <button pButton pRipple [label]="buttons.save" icon="pi pi-check" [rounded]="true" size="small"
+              class="mr-2 shadow-3 hover-primary" (click)="saveLot()" [disabled]="formLot.invalid">
+            </button>
+          </div>
+        </ng-template>
+      </p-dialog>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,77 @@
+@if (withFloatLabel) { 
+  <p-float-label>
+    <p-multiSelect
+      inputId="multi-select-generic"
+      [(ngModel)]="selectedIds"
+      [options]="options"
+      optionLabel="name"
+      optionValue="id"
+      [filter]="true"
+      filterBy="name"
+      (onChange)="setOptions($event.value)"
+      (onClear)="setOptions([])"
+      [showClear]="true"
+      appendTo="body"
+      emptyFilterMessage="No se encontraron coincidencias."
+      emptyMessage="No se encontraron coincidencias."
+      filterPlaceholder="Introduzca un caracter"
+      [virtualScroll]="true"
+      [virtualScrollItemSize]="30"
+      [maxSelectedLabels]="maxSelectedLabels"
+      [selectedItemsLabel]="`Varios items seleccionados`"
+      styleClass="w-full"
+    ></p-multiSelect>
+    <label for="multi-select-generic" class="text-lg font-bold text-800 required-field"> {{ label }} </label>
+  </p-float-label>
+} @else {
+  <p-multiSelect
+    [(ngModel)]="selectedIds"
+    [options]="options"
+    optionLabel="name"
+    optionValue="id"
+    [filter]="true"
+    filterBy="name"
+    (onChange)="setOptions($event.value)"
+    (onClear)="setOptions([])"
+    [showClear]="true"
+    appendTo="body"
+    [placeholder]="labels.placeholderSelectAOption"
+    emptyFilterMessage="No se encontraron coincidencias."
+    emptyMessage="No se encontraron coincidencias."
+    filterPlaceholder="Introduzca un caracter"
+    [virtualScroll]="true"
+    [virtualScrollItemSize]="30"
+    [maxSelectedLabels]="maxSelectedLabels"
+    [selectedItemsLabel]="'Varios items seleccionados'"
+  ></p-multiSelect>}
+@if (showListNames) {
+  <div class="flex justify-content-center">
+    <p-table
+      [value]="selectedList()"
+      [scrollable]="true"
+      scrollHeight="350px">
+      <ng-template pTemplate="body" let-option>
+        <tr class="obs-body">
+          <td>
+            <p-button
+              pButton 
+              pRipple 
+              icon="pi pi-minus"
+              severity="danger"
+              size="small"
+              class="shadow-2 mr-2"
+              pTooltip="Eliminar de la lista"
+              [rounded]="true"
+              [outlined]="true"
+              [text]="true" 
+              (click)="deleteOptionOfList(option.id)"
+            ></p-button>
+            {{ option.name }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+}
+
+

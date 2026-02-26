@@ -1,0 +1,16 @@
+export enum TableColumnType {
+  STATUS,
+  BOOLEAN,
+  TEXT,
+  NUMERIC,
+  DATE,
+  AMOUNT,
+  UNIT,
+  PERCENTAGE,
+  ENUM,
+  PERCENT,
+  MAPPED,
+  IMAGE_BASE64,
+  CHIP,
+  SWITCH
+}

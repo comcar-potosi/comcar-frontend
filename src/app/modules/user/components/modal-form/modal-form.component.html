@@ -1,0 +1,123 @@
+<form [formGroup]="formUser">
+
+  <div class="grid">
+    <div class="col-12">
+      <p-dialog [(visible)]="openModal" styleClass="w-10 md:w-6 lg:w-4" [header]="tittleForm" [modal]="true"
+        class="p-fluid">
+        <ng-template pTemplate="content">
+
+          <app-message-required-field></app-message-required-field>
+
+          <div class="form-group field mt-5">
+            <p-float-label>
+              <input type="text" pInputText id="name" formControlName="name" class="w-full" />
+              <label htmlFor="name" class="text-lg font-bold text-800 required-field"> {{ labels.name }} </label>
+            </p-float-label>
+            @if (formUser.controls['name'].touched && formUser.get('name')?.hasError('required')) {
+            <small class="p-error block mt-2"> {{ messages.requiredField }} </small>
+            }
+            @if (formUser.get('name')?.hasError('pattern')) {
+            <small class="p-error block mt-2">{{ messages.deniedCharactersName }}</small>
+            }
+            @if (formUser.get('name')?.hasError('minlength')) {
+            <small class="p-error block mt-2">{{ messages.requiredMinLengthCode }}</small>
+            }
+            @if (formUser.get('name')?.hasError('noSpace')) {
+            <small class="p-error block mt-2">{{ messages.noOnlySpace }}</small>
+            }
+          </div>
+
+          <div class="form-group field mt-5">
+            <p-float-label>
+              <input type="text" [ariaAutoComplete]="false" [autocomplete]="false" pInputText id="surname"
+                formControlName="surname" class="w-full" />
+              <label htmlFor="surname" class="text-lg font-bold text-800 required-field"> {{ labels.surname }} </label>
+            </p-float-label>
+            @if (formUser.controls['surname'].touched && formUser.get('surname')?.hasError('required')) {
+            <small class="p-error block mt-2"> {{ messages.requiredField }} </small>
+            }
+            @if (formUser.get('surname')?.hasError('pattern')) {
+            <small class="p-error block mt-2">{{ messages.deniedCharactersName }}</small>
+            }
+            @if (formUser.get('surname')?.hasError('minlength')) {
+            <small class="p-error block mt-2">{{ messages.requiredMinLengthCode }}</small>
+            }
+            @if (formUser.get('surname')?.hasError('noSpace')) {
+            <small class="p-error block mt-2">{{ messages.noOnlySpace }}</small>
+            }
+          </div>
+
+          <div class="form-group field mt-5">
+            <p-float-label>
+              <input type="text" [ariaAutoComplete]="false" [autocomplete]="false" pInputText id="username"
+                formControlName="username" class="w-full" />
+              <label htmlFor="username" class="text-lg font-bold text-800 required-field"> {{ labels.userName }}
+              </label>
+            </p-float-label>
+            @if (formUser.controls['username'].touched && formUser.get('username')?.hasError('required')) {
+            <small class="p-error block mt-2"> {{ messages.requiredField }} </small>
+            }
+            @if (formUser.get('username')?.hasError('pattern')) {
+            <small class="p-error block mt-2">{{ messages.deniedCharactersName }}</small>
+            }
+            @if (formUser.get('username')?.hasError('minlength')) {
+            <small class="p-error block mt-2">{{ messages.requiredMinLengthCode }}</small>
+            }
+            @if (formUser.get('username')?.hasError('noSpace')) {
+            <small class="p-error block mt-2">{{ messages.noOnlySpace }}</small>
+            }
+          </div>
+
+          @if (!isEdit()) {
+          <div class="form-group field mt-5">
+            <p-float-label>
+              <p-password styleClass="w-full" formControlName="password" inputId="password"
+                [promptLabel]="labels.choosePassword" [weakLabel]="labels.weakPassword"
+                [mediumLabel]="labels.mediumPassword" [strongLabel]="labels.safePassword" [toggleMask]="true" />
+              <label htmlFor="password" class="text-lg font-bold text-800 required-field"> {{ labels.password }}
+              </label>
+            </p-float-label>
+            @if (formUser.controls['password'].touched && formUser.get('password')?.hasError('required')) {
+            <small class="p-error block mt-2"> {{ messages.requiredField }} </small>
+            }
+            @if (formUser.get('password')?.hasError('noSpace')) {
+            <small class="p-error block mt-2">{{ messages.noOnlySpace }}</small>
+            }
+            @if (formUser.get('password')?.hasError('minlength')) {
+            <small class="p-error block mt-2">{{ messages.requiredMinLengthPassword }}</small>
+            }
+          </div>
+          }
+
+          <div class="form-group field mt-5">
+            <p-float-label>
+              <p-select inputId="role" formControlName="role" [options]="roles | keyvalue" optionLabel="value"
+                optionValue="key" [filter]="true" filterBy="value" styleClass="w-full" appendTo="body"></p-select>
+              <label for="role" class="text-lg font-bold text-800 required-field">
+                {{ labels.role }}
+              </label>
+            </p-float-label>
+            @if (formUser.controls['role'].touched && formUser.get('role')?.hasError('required')) {
+            <small class="p-error block mt-2"> {{ messages.requiredField }} </small>
+            }
+          </div>
+
+          <div class="form-group field mt-4 ml-3 flex">
+            <label htmlFor="state" class="text-lg font-bold text-800 mr-3"> {{ labels.status }} </label>
+            <p-toggleswitch formControlName="state" />
+          </div>
+
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <div class="p-2 pb-3">
+            <button type="button" pButton pRipple [label]="buttons.cancel" icon="pi pi-times" severity="secondary"
+              [rounded]="true" size="small" class="mr-2 shadow-3" (click)="hideModal()"></button>
+            <button pButton pRipple [label]="buttons.save" icon="pi pi-check" [rounded]="true" size="small"
+              class="mr-2 shadow-3 hover-primary" (click)="saveUser()" [disabled]="formUser.invalid">
+            </button>
+          </div>
+        </ng-template>
+      </p-dialog>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,43 @@
+<form [formGroup]="formLogin" (ngSubmit)="submitLogin()">
+  <div class="grid flex px-5 mt-5">
+    <div class="col-12 flex flex justify-content-center align-items-start mb-4">
+      <div class="background-gray-blured px-4 py-2">
+        <p
+          [ngClass]="['text-center', 'typing-effect', 'title-login', 'font-bold', 'lynch-900', hideBorderTyping? 'border-none white-space-normal': '']">
+          {{ messages.loginMessage }}
+        </p>
+      </div>
+    </div>
+
+    @if (showLoginForm()) {
+    <div class="col-12 flex justify-content-center align-items-center zoomin animation-duration-1000">
+      <div class="p-fluid mt-3 background-gray-blured px-5 pt-5 pb-3 mt-5 w-30rem">
+        <div class="form-group field my-3">
+          <p-floatlabel>
+            <input id="username" pInputText type="text" formControlName="username" class="p-inputtext w-full" />
+            <label for="username" class="text-lg font-bold lynch-800 required-field">{{ labels.user }}</label>
+          </p-floatlabel>
+          @if (formLogin.get('username')?.hasError('username')) {
+          <small class="p-error block mt-2">{{ messages.emailIsInvalid }}</small>
+          }
+        </div>
+        <div class="form-group field mt-6">
+          <p-floatlabel>
+            <p-password inputId="password" formControlName="password" class="w-full" styleClass="w-full"
+              [toggleMask]="true" [feedback]="false"></p-password>
+            <label for="password" class="text-lg font-bold lynch-800 required-field">{{ labels.password }}</label>
+          </p-floatlabel>
+          @if (formLogin.controls['password'].touched && formLogin.get('password')?.hasError('required')) {
+          <small class="p-error block mt-2">{{ messages.passwordIsRequired }}</small>
+          }
+        </div>
+        <div class="p-2 pb-3 col-12 flex justify-content-center">
+          <button type="submit" pButton pRipple [label]="labels.getInto" icon="pi pi-sign-in"
+            class="p-button-warn p-button-rounded mr-2 sombra-black p-button-sm hover-warn w-auto"
+            [disabled]="formLogin.invalid"></button>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+</form>

@@ -1,0 +1,224 @@
+<form [formGroup]="formCooperative">
+
+  <div class="grid">
+    <div class="col-12">
+      <p-dialog [(visible)]="openModal" styleClass="w-10 md:w-6 lg:w-4" [header]="tittleForm" [modal]="true" class="p-fluid">
+        <ng-template pTemplate="content">
+
+          <app-message-required-field></app-message-required-field>
+
+          <div class="form-group field mt-5">
+            <p-float-label>
+              <input type="text" pInputText id="name" formControlName="name" class="w-full" />
+              <label htmlFor="name" class="text-lg font-bold text-800 required-field"> {{ labels.name }} </label>
+            </p-float-label>
+            @if (formCooperative.controls['name'].touched && formCooperative.get('name')?.hasError('required')) {
+              <small class="p-error block mt-2" > {{ messages.requiredField }} </small>
+            }
+            @if (formCooperative.get('name')?.hasError('pattern')) {
+              <small class="p-error block mt-2">{{ messages.deniedCharactersCode }}</small>
+            }
+            @if (formCooperative.get('name')?.hasError('minlength')) {
+              <small class="p-error block mt-2">{{ messages.requiredMinLengthCode }}</small>
+            }
+            @if (formCooperative.get('name')?.hasError('noSpace')) {
+              <small class="p-error block mt-2">{{ messages.noOnlySpace }}</small>
+            }
+          </div>
+          
+          <table class="mt-4 w-full">
+            <thead>
+              <tr>
+                <th class="w-5 text-lg font-semibold">Retenciones</th>
+                <th class="w-4 text-lg font-semibold">Porcentaje %</th>
+                <th class="w-3 text-lg font-semibold">Impresión</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <h4 class="text-center mr-4">{{ labels.cajaNacional }}</h4>
+                </td>
+                <td>
+                  <p-inputNumber
+                    id="cajaNacional"
+                    mode="decimal" 
+                    locale="en-US"
+                    [minFractionDigits]="2" 
+                    [maxFractionDigits]="2"
+                    [useGrouping]="false"
+                    [min]="limits.minPercent"
+                    [max]="limits.maxPercent"
+                    formControlName="cajaNacional"
+                    styleClass="w-full"
+                  />
+                </td>
+                <td class="text-center">
+                  <p-toggleswitch formControlName="printCajaNacional"/>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <h4 class="text-center mr-4">{{ labels.fedecomin }}</h4>
+                </td>
+                <td>
+                  <p-inputNumber
+                    id="fedecomin"
+                    mode="decimal" 
+                    locale="en-US"
+                    [minFractionDigits]="2" 
+                    [maxFractionDigits]="2"
+                    [useGrouping]="false"
+                    [min]="limits.minPercent"
+                    [max]="limits.maxPercent"
+                    formControlName="fedecomin"
+                    styleClass="w-full"
+                  />
+                </td>
+                <td class="text-center">
+                  <p-toggleswitch formControlName="printFedecomin"/>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <h4 class="text-center mr-4">{{ labels.fencomin }}</h4>
+                </td>
+                <td>
+                  <p-inputNumber
+                    id="fencomin"
+                    mode="decimal" 
+                    locale="en-US"
+                    [minFractionDigits]="2" 
+                    [maxFractionDigits]="2"
+                    [useGrouping]="false"
+                    [min]="limits.minPercent"
+                    [max]="limits.maxPercent"
+                    formControlName="fencomin"
+                    styleClass="w-full"
+                  />
+                </td>
+                <td class="text-center">
+                  <p-toggleswitch formControlName="printFencomin"/>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <h4 class="text-center mr-4">{{ labels.comibol }}</h4>
+                </td>
+                <td>
+                  <p-inputNumber
+                    id="comibol"
+                    mode="decimal" 
+                    locale="en-US"
+                    [minFractionDigits]="2" 
+                    [maxFractionDigits]="2"
+                    [useGrouping]="false"
+                    [min]="limits.minPercent"
+                    [max]="limits.maxPercent"
+                    formControlName="comibol"
+                    styleClass="w-full"
+                  />
+                </td>
+                <td class="text-center">
+                  <p-toggleswitch formControlName="printComibol"/>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <h4 class="text-center mr-4">{{ labels.wilstermann }}</h4>
+                </td>
+                <td>
+                  <p-inputNumber
+                    id="wilstermann"
+                    mode="decimal" 
+                    locale="en-US"
+                    [minFractionDigits]="2" 
+                    [maxFractionDigits]="2"
+                    [useGrouping]="false"
+                    [min]="limits.minPercent"
+                    [max]="limits.maxPercent"
+                    formControlName="wilstermann"
+                    styleClass="w-full"
+                  />
+                </td>
+                <td class="text-center">
+                  <p-toggleswitch formControlName="printWilstermann"/>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <h4 class="text-center mr-4">{{ labels.cooperativeContribution }}</h4>
+                </td>
+                <td>
+                  <p-inputNumber
+                    id="cooperativeContribution"
+                    mode="decimal" 
+                    locale="en-US"
+                    [minFractionDigits]="2" 
+                    [maxFractionDigits]="2"
+                    [useGrouping]="false"
+                    [min]="limits.minPercent"
+                    [max]="limits.maxPercent"
+                    formControlName="cooperativeContribution"
+                    styleClass="w-full"
+                  />
+                </td>
+                <td class="text-center">
+                  <p-toggleswitch formControlName="printCooperativeContribution"/>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <h4 class="text-center mr-4">{{ labels.miningRoyalties }}</h4>
+                </td>
+                <td>
+                  <p-inputNumber
+                    id="miningRoyalties"
+                    mode="decimal" 
+                    locale="en-US"
+                    [minFractionDigits]="2" 
+                    [maxFractionDigits]="2"
+                    [useGrouping]="false"
+                    [min]="limits.minPercent"
+                    [max]="limits.maxPercent"
+                    formControlName="miningRoyalties"
+                    styleClass="w-full"
+                  />
+                </td>
+                <td class="text-center">
+                  <p-toggleswitch formControlName="printMiningRoyalties"/>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <div class="p-2 pb-3">
+            <button
+              type="button"
+              pButton pRipple
+              [label]="buttons.cancel"
+              icon="pi pi-times"
+              severity="secondary"
+              [rounded]="true"
+              size="small"
+              class="mr-2 shadow-3"
+              (click)="hideModal()"
+            ></button>
+            <button
+              pButton pRipple
+              [label]="buttons.save"
+              icon="pi pi-check"
+              [rounded]="true"
+              size="small"
+              class="mr-2 shadow-3 hover-primary"
+              (click)="saveCooperative()"
+              [disabled]="formCooperative.invalid">
+            </button>
+          </div>
+        </ng-template>
+      </p-dialog>
+    </div>
+  </div>
+</form>

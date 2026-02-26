@@ -1,0 +1,88 @@
+<form [formGroup]="formAdvanceLoad">
+
+  <div class="grid">
+    <div class="col-12">
+      <p-dialog [(visible)]="openModal" styleClass="w-10 lg:w-6" [header]="tittleForm" [modal]="true" class="p-fluid">
+        <ng-template pTemplate="content">
+
+          <app-message-required-field></app-message-required-field>
+
+          <div class="grid">
+
+            <div class="form-group field mt-6 col-6">
+              <p-float-label>
+                <div
+                  [ngClass]="['p-2 non-editable-field flex align-items-center', formAdvanceLoad.value.receiptCode? 'p-inputwrapper-filled': '']">
+                  {{ formAdvanceLoad.value.receiptCode }}
+                </div>
+                <label class="text-lg font-bold text-800 required-field"> {{ labels.receiptCode }} </label>
+              </p-float-label>
+            </div>
+
+            <div class="form-group field mt-6 col-6">
+              <p-float-label>
+                <p-datepicker id="date" styleClass="w-full" [showIcon]="true" dateFormat="dd/mm/yy" appendTo="body"
+                  formControlName="date">
+                </p-datepicker>
+                <label htmlFor="date" class="text-lg font-bold text-800 required-field"> {{ labels.date }} </label>
+              </p-float-label>
+            </div>
+
+            <div class="form-group field mt-3 col-4">
+              <p-float-label>
+                <p-select inputId="paymentType" formControlName="paymentType" [options]="paymentTypes | keyvalue"
+                  optionLabel="value" optionValue="value" [filter]="true" filterBy="value" styleClass="w-full"
+                  appendTo="body" (onChange)="onchangedPaymentType()"></p-select>
+                <label for="paymentType" class="text-lg font-bold text-800 required-field"> {{ labels.paymentType }}
+                </label>
+              </p-float-label>
+            </div>
+
+            <div *ngIf="formAdvanceLoad.value.paymentType === paymentTypes.CHECK"
+              class="form-group field mt-3 col-4 fadeinleft animation-duration-400">
+              <p-float-label>
+                <input type="text" pInputText id="checkNumber" formControlName="checkNumber" class="w-full" />
+                <label htmlFor="checkNumber" class="text-lg font-bold text-800 required-field"> {{ labels.checkNumber }}
+                </label>
+              </p-float-label>
+            </div>
+
+            <div class="form-group field mt-3 col-4">
+              <p-float-label>
+                <p-inputNumber id="amount" mode="decimal" locale="en-US" [minFractionDigits]="2" [maxFractionDigits]="2"
+                  [useGrouping]="false" [min]="0" formControlName="amount" styleClass="w-full" />
+                <label htmlFor="amount" class="text-lg font-bold text-800 required-field"> {{ labels.amount }} Bs
+                </label>
+              </p-float-label>
+            </div>
+
+            <div class="form-group field mt-3 col-12">
+              <p-float-label>
+                <input type="text" pInputText id="concept" formControlName="concept" class="w-full" />
+                <label htmlFor="concept" class="text-lg font-bold text-800 required-field"> {{ labels.concept }}
+                </label>
+              </p-float-label>
+            </div>
+
+            <div class="form-group field mt-3 col-12">
+              <p-float-label>
+                <input type="text" pInputText id="observation" formControlName="observation" class="w-full" />
+                <label htmlFor="observation" class="text-lg font-bold text-800"> {{ labels.observation }} </label>
+              </p-float-label>
+            </div>
+          </div>
+
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <div class="p-2 pb-3">
+            <button type="button" pButton pRipple [label]="buttons.cancel" icon="pi pi-times" severity="secondary"
+              [rounded]="true" size="small" class="mr-2 shadow-3" (click)="hideModal()"></button>
+            <button pButton pRipple [label]="buttons.save" icon="pi pi-check" [rounded]="true" size="small"
+              class="mr-2 shadow-3 hover-primary" (click)="saveAdvanceLoad()" [disabled]="formAdvanceLoad.invalid">
+            </button>
+          </div>
+        </ng-template>
+      </p-dialog>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,164 @@
+<p-toolbar class="option-menu">
+  <ng-template pTemplate="left">
+    <ng-container *ngIf="leftToolbarTemplate">
+      <ng-container *ngTemplateOutlet="leftToolbarTemplate"></ng-container>
+    </ng-container>
+  </ng-template>
+  <ng-template pTemplate="right">
+    <div class="flex gap-1 flex-wrap justify-content-end align-items-baseline">
+      <p-multiSelect *ngIf="tableColumnDefinitions.length >= 3" [options]="tableColumnDefinitions"
+        [(ngModel)]="displayedColumns" optionLabel="header" dropdownIcon="pi pi-cog" display="chip"
+        (onChange)="onToggleColumns($event)" [pTooltip]="tooltips.selectColumns" tooltipPosition="top">
+        <ng-template let-option pTemplate="item">
+          <div class="p-multiselect-representative-option w-15rem">
+            <span class="ml-1">{{ option.header }}</span>
+          </div>
+        </ng-template>
+      </p-multiSelect>
+      <ng-container *ngIf="rightToolbarTemplate">
+        <ng-container *ngTemplateOutlet="rightToolbarTemplate"></ng-container>
+      </ng-container>
+      <button pButton class="p-button-outlined p-button-secondary" icon="pi pi-filter-slash" (click)="clear()"
+        [pTooltip]="tooltips.clearFilters" tooltipPosition="top">
+      </button>
+      <div class="text-right">
+        <p-iconfield styleClass="ml-auto">
+          <p-inputicon styleClass="pi pi-search" />
+          <input type="text" pInputText (input)="onGlobalFilter($event)"
+            [placeholder]="placeholders.searchInCurrentView" tooltipPosition="top" />
+        </p-iconfield>
+      </div>
+      <button pButton pRipple type="button" icon="pi pi-sync" class="p-button-outlined p-button-success"
+        (click)="reload()" [pTooltip]="tooltips.reload" tooltipPosition="top">
+      </button>
+    </div>
+  </ng-template>
+</p-toolbar>
+<p-table #primeTable [value]="items" [dataKey]="tableProps.dataKey" [sortField]="tableProps.sortField"
+  [sortOrder]="tableProps.sortOrder" [defaultSortOrder]="-1" [resizableColumns]="true" [reorderableColumns]="true"
+  selectionMode="single" [style]="{'max-width': '93vw'}" [(selection)]="selectedItem" [rows]="tableProps.rows"
+  [showCurrentPageReport]="true" [rowsPerPageOptions]="tableProps.rowsPerPageOptions" [rowHover]="true"
+  styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
+  [globalFilterFields]="tableGlobalFilterFields"
+  [currentPageReportTemplate]="(primeTable.first | formatCurrentPageReportTemplate : primeTable.totalRecords : primeTable.rows)"
+  (onRowSelect)="onRowSelect($event.data)" (onRowUnselect)="onRowUnselect()" (onFilter)="onRowUnselect()"
+  (onPage)="onRowUnselect()" [columns]="displayedColumns" columnResizeMode="expand"
+  [rowTrackBy]="tableProps.rowTrackBy">
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let column of displayedColumns" pResizableColumn pReorderableColumn [style]="column.headerStyle"
+        scope="col" [pSortableColumn]="column.disableSort? undefined : column.field">
+        {{ column.header }}
+        <p-sortIcon *ngIf="!column.disableSort" [field]="column.field">
+        </p-sortIcon>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-editing="editing" let-expanded="expanded">
+    <ng-container *ngIf="bodyTemplate; else defaultBodyContent">
+      <tr [pSelectableRow]="row">
+        <ng-container *ngTemplateOutlet="bodyTemplate; context: {
+            rowData: row,
+            rowIndex: rowIndex,
+            displayedColumns: displayedColumns,
+            editing: editing,
+            isExpanded: expanded,
+            table: primeTable
+          }">
+        </ng-container>
+      </tr>
+
+    </ng-container>
+    <ng-template #defaultBodyContent>
+      <tr [pSelectableRow]="row">
+        <td [style]="column.bodyStyle" *ngFor="let column of displayedColumns">
+          <ng-container [ngSwitch]="column.columnType">
+            <ng-template [ngSwitchCase]="tableColumnFormatTypes.NUMERIC">
+              <div class="text-right" [ngClass]="column.cssClassName">
+                {{ row[column.field] }}
+              </div>
+            </ng-template>
+
+            <ng-template [ngSwitchCase]="tableColumnFormatTypes.PERCENT">
+              <span [ngClass]="column.cssClassName">
+                {{ (row[column.field]/100) | percent: common.decimalsAllowed }}
+              </span>
+            </ng-template>
+
+            <ng-template [ngSwitchCase]="tableColumnFormatTypes.BOOLEAN">
+              {{ row[column.field] | booleanColumnFormat: column.booleanColumnFormatConfig }}
+            </ng-template>
+
+            <ng-template [ngSwitchCase]="tableColumnFormatTypes.STATUS">
+              <p [ngClass]="['text-center', row[column.field]? 'text-green-500': 'text-red-500']">
+                {{ row[column.field]? 'Activo': 'Inactivo' }}
+              </p>
+            </ng-template>
+
+            <ng-template [ngSwitchCase]="tableColumnFormatTypes.DATE">
+              <span [ngClass]="column.cssClassName">
+                {{ row[column.field] | date: common.dateDisplayFormat }}
+              </span>
+            </ng-template>
+
+            <ng-template [ngSwitchCase]="tableColumnFormatTypes.AMOUNT">
+              <div class="text-right" [ngClass]="column.cssClassName">
+                {{ row[column.field] | formatFieldAmount }}
+              </div>
+            </ng-template>
+
+            <ng-template [ngSwitchCase]="tableColumnFormatTypes.IMAGE_BASE64">
+              <div class="text-center" [style]="{width: '60px', height:'50px'}">
+                <img class="border-round-xl shadow-3" width="100%" height="100%"
+                  [src]="'data:image/png;base64,' + row[column.field]">
+              </div>
+            </ng-template>
+
+            <ng-template [ngSwitchCase]="tableColumnFormatTypes.CHIP">
+              <p-chip styleClass="pl-0 py-0 pr-3">
+                <span class="border-circle flex align-items-center justify-content-center mr-2 py-1 px-2" [ngClass]="
+                    column.chipStyle
+                      ? column.chipStyle(row[column.field]).backgroundClass
+                      : ''
+                  ">
+                  {{ row[column.field] | uppercase | slice : 0 : 1 }}
+                </span>
+                <span class="ml-2 font-bold" [ngClass]="
+                    column.chipStyle
+                      ? column.chipStyle(row[column.field]).textClass
+                      : ''
+                  ">
+                  {{ row[column.field] }}
+                </span>
+              </p-chip>
+            </ng-template>
+
+            <ng-container *ngSwitchDefault>
+              {{row[column.field]}}
+            </ng-container>
+          </ng-container>
+        </td>
+      </tr>
+    </ng-template>
+  </ng-template>
+
+  <ng-template pTemplate="rowexpansion" let-rowData>
+    <ng-container *ngIf="rowExpansionTemplate">
+      <ng-container *ngTemplateOutlet="rowExpansionTemplate; context: {
+          rowData: rowData,
+          columnsLength: displayedColumns.length
+        }">
+      </ng-container>
+    </ng-container>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td [attr.colspan]="displayedColumns.length">{{ messages.emptyMessage }}</td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="loadingbody">
+    <tr>
+      <td [attr.colspan]="displayedColumns.length">{{ messages.emptyMessage }}</td>
+    </tr>
+  </ng-template>
+</p-table>

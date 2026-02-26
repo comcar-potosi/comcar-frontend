@@ -1,0 +1,72 @@
+<form [formGroup]="formTypeMineral">
+
+  <div class="grid">
+    <div class="col-12">
+      <p-dialog [(visible)]="openModal" styleClass="w-10 md:w-6 lg:w-4" [header]="tittleForm" [modal]="true" class="p-fluid">
+        <ng-template pTemplate="content">
+
+          <app-message-required-field></app-message-required-field>
+
+          <div class="form-group field mt-5">
+            <p-float-label>
+              <input type="text" pInputText id="name" formControlName="name" class="w-full" />
+              <label htmlFor="name" class="text-lg font-bold text-800 required-field"> {{ labels.name }} </label>
+            </p-float-label>
+            @if (formTypeMineral.controls['name'].touched && formTypeMineral.get('name')?.hasError('required')) {
+              <small class="p-error block mt-2" > {{ messages.requiredField }} </small>
+            }
+            @if (formTypeMineral.get('name')?.hasError('pattern')) {
+              <small class="p-error block mt-2">{{ messages.deniedCharactersCode }}</small>
+            }
+            @if (formTypeMineral.get('name')?.hasError('minlength')) {
+              <small class="p-error block mt-2">{{ messages.requiredMinLengthCode }}</small>
+            }
+            @if (formTypeMineral.get('name')?.hasError('noSpace')) {
+              <small class="p-error block mt-2">{{ messages.noOnlySpace }}</small>
+            }
+          </div>
+          
+          <div class="form-group field mt-5">
+            <p-float-label>
+              <input type="text" pInputText id="symbol" formControlName="symbol" class="w-full" />
+              <label htmlFor="symbol" class="text-lg font-bold text-800 required-field"> {{ labels.symbol }} </label>
+            </p-float-label>
+            @if (formTypeMineral.controls['symbol'].touched && formTypeMineral.get('symbol')?.hasError('required')) {
+              <small class="p-error block mt-2" > {{ messages.requiredField }} </small>
+            }
+            @if (formTypeMineral.get('symbol')?.hasError('noSpace')) {
+              <small class="p-error block mt-2">{{ messages.noOnlySpace }}</small>
+            }
+          </div>
+          
+
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <div class="p-2 pb-3">
+            <button
+              type="button"
+              pButton pRipple
+              [label]="buttons.cancel"
+              icon="pi pi-times"
+              severity="secondary"
+              [rounded]="true"
+              size="small"
+              class="mr-2 shadow-3"
+              (click)="hideModal()"
+            ></button>
+            <button
+              pButton pRipple
+              [label]="buttons.save"
+              icon="pi pi-check"
+              [rounded]="true"
+              size="small"
+              class="mr-2 shadow-3 hover-primary"
+              (click)="saveTypeMineral()"
+              [disabled]="formTypeMineral.invalid">
+            </button>
+          </div>
+        </ng-template>
+      </p-dialog>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,61 @@
+<header
+  [ngClass]="['pt-2 pb-1 px-4 flex overflow-hidden sticky top-0 header-main-custom shadow-3', backgroundColorHeader]"
+  [style]="{'width': '101%', 'z-index': 100}"
+  >
+  <div class="flex-none flex align-items-center justify-content-center px-2">
+    <img [src]="'/assets/images/'+image_logo" alt="" routerLink="/" class="image-logo-header px-3 border-round-3xl cursor-pointer">
+  </div>
+  <nav class="flex-grow-1 flex justify-content-center">
+    @if (loginService.userId()) {
+      <ul class="flex flex-wrap gap-3 justify-content-center font-semibold align-items-center fadeinup animation-duration-500">
+        @for (option of optionsHeader(); track option.routerLink) {
+          @if (loginService.haveSomeRole(option.access) && option.show) {
+            <li>
+              <a
+                class="hover-round-header px-2 lynch-900 flex align-items-center pt-1"
+                [routerLink]="option.routerLink"
+                routerLinkActive='header-active border-primary'>
+                {{option.label}}
+              </a>
+            </li>
+          }
+        }
+        @if (configurationLinks().length > 0) {
+          <li>
+            <a
+              (click)="parameters.toggle($event)"
+              class="hover-round-header px-2 lynch-900 flex align-items-center pt-1 cursor-pointer">
+              {{ labels.configurations }}
+              <i class="pi pi-angle-down ml-1"></i>
+            </a>
+          </li>
+        }
+      </ul>
+    }
+  </nav>
+  <div class="flex-wrap flex align-items-center justify-content-center px-2">
+    <p-toggleswitch
+      inputId="themeSelection"
+      [(ngModel)]="themeSelection"
+      [pTooltip]="labelMode"
+      tooltipPosition="bottom"
+      (onChange)="changeTheme(true)"
+      class="mr-2"
+    ></p-toggleswitch>
+    @if (loginService.userId()) {
+      <a
+        (click)="menu.toggle($event)"
+        class="hover-round-header lynch-800 font-medium px-2 py-1 text-center"
+        >
+        <span class="cursor-pointer">
+          {{ loginService.user() }}
+        </span>
+        <i class="pi pi-user ml-2 text-lg"></i>
+      </a>
+    }
+  </div>
+
+</header>
+<p-menu #menu [model]="optionsUser" [popup]="true"></p-menu>
+<p-menu #parameters [model]="configurationLinks()" [popup]="true"></p-menu>
+

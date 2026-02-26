@@ -1,0 +1,310 @@
+<form [formGroup]="formPercentageLiquidation">
+
+  <div class="grid">
+    <div class="col-12">
+      <p-dialog [(visible)]="openModal" styleClass="w-8" [header]="tittleForm" [modal]="true" class="p-fluid">
+        <ng-template pTemplate="content">
+
+          <app-message-required-field></app-message-required-field>
+
+          <div class="grid">
+
+            <div class="form-group field mt-6 col-3">
+              <p-float-label>
+                <p-select inputId="loadId" formControlName="loadId" [options]="loads" optionLabel="correlativeLotCode"
+                  optionValue="id" [filter]="true" filterBy="value" styleClass="w-full" appendTo="body"
+                  (onChange)="onChagedLoad()">
+                  <ng-template let-lot #item>
+                    <div class="border-bottom-1 border-primary pb-2">
+                      <div>
+                        {{ labels.lot }}:
+                        <b>{{ lot.correlativeLotCode }}</b>
+                      </div>
+                      <div>
+                        {{ labels.supplier }}:
+                        <b>{{ lot.supplierName }}</b>
+                      </div>
+                      <div>
+                        {{ labels.weight }}:
+                        <b>{{ lot.weight | formatFieldAmount }}</b>
+                      </div>
+                    </div>
+                  </ng-template>
+                </p-select>
+                <label for="loadId" class="text-lg font-bold text-800 required-field"> {{ labels.loads }} </label>
+              </p-float-label>
+            </div>
+          </div>
+          <div class="grid">
+
+            <div class="form-group field mt-3 col-3">
+              <p-float-label>
+                <div
+                  [ngClass]="['p-2 non-editable-field flex align-items-center', correlativeLotCode()? 'p-inputwrapper-filled': '']">
+                  {{ correlativeLotCode() }}
+                </div>
+                <label class="text-lg font-bold text-800 required-field"> {{ labels.lot }} </label>
+              </p-float-label>
+            </div>
+
+            <div class="form-group field mt-3 col-3">
+              <p-float-label>
+                <p-select inputId="supplierId" formControlName="supplierId" [options]="suppliers" optionLabel="fullName"
+                  optionValue="id" [filter]="true" filterBy="fullName" styleClass="w-full" appendTo="body"></p-select>
+                <label for="supplierId" class="text-lg font-bold text-800 required-field"> {{ labels.supplier }}
+                </label>
+              </p-float-label>
+            </div>
+
+            <div class="form-group field mt-3 col-3">
+              <p-float-label>
+                <p-datepicker id="admissionDate" styleClass="w-full" [showIcon]="true" dateFormat="dd/mm/yy"
+                  appendTo="body" formControlName="admissionDate">
+                </p-datepicker>
+                <label htmlFor="admissionDate" class="text-lg font-bold text-800 required-field"> {{
+                  labels.admissionDate }} </label>
+              </p-float-label>
+            </div>
+
+            <div class="form-group field mt-3 col-3">
+              <p-float-label>
+                <p-datepicker id="liquidationDate" styleClass="w-full" [showIcon]="true" dateFormat="dd/mm/yy"
+                  appendTo="body" formControlName="liquidationDate">
+                </p-datepicker>
+                <label htmlFor="liquidationDate" class="text-lg font-bold text-800 required-field"> {{
+                  labels.liquidationDate }} </label>
+              </p-float-label>
+            </div>
+          </div>
+          <div class="grid">
+
+            <div class="form-group field mt-3 col-3">
+              <p-float-label>
+                <p-inputNumber id="quotation" mode="decimal" locale="en-US" [minFractionDigits]="2"
+                  [maxFractionDigits]="2" [useGrouping]="false" [min]="0" formControlName="quotation"
+                  styleClass="w-full" (onInput)="calculateTotalImport()" />
+                <label htmlFor="quotation" class="text-lg font-bold text-800 required-field">
+                  {{ labels.quotation}}
+                </label>
+              </p-float-label>
+            </div>
+
+            <div class="form-group field mt-3 col-3">
+              <p-float-label>
+                <p-inputNumber id="percentage" mode="decimal" locale="en-US" [minFractionDigits]="2"
+                  [maxFractionDigits]="2" [useGrouping]="false" [min]="0" formControlName="percentage"
+                  styleClass="w-full" (onInput)="calculateTotalImport()" />
+                <label htmlFor="percentage" class="text-lg font-bold text-800 required-field">
+                  {{ labels.percentage}}
+                </label>
+              </p-float-label>
+            </div>
+
+            <div class="form-group field mt-3 col-3">
+              <p-float-label>
+                <p-inputNumber id="exchangeRate" mode="decimal" locale="en-US" [minFractionDigits]="2"
+                  [maxFractionDigits]="2" [useGrouping]="false" [min]="0" formControlName="exchangeRate"
+                  styleClass="w-full" (onInput)="calculateTotalImport()" />
+                <label htmlFor="exchangeRate" class="text-lg font-bold text-800 required-field">
+                  {{ labels.exchangeRate}}
+                </label>
+              </p-float-label>
+            </div>
+
+            <div class="form-group field mt-3 col-3">
+              <p-float-label>
+                <p-inputNumber id="dmSilver" mode="decimal" locale="en-US" [minFractionDigits]="2"
+                  [maxFractionDigits]="2" [useGrouping]="false" [min]="0" formControlName="dmSilver" styleClass="w-full"
+                  (onInput)="calculateSolidMetricWetTonnes()" />
+                <label htmlFor="dmSilver" class="text-lg font-bold text-800 required-field"> {{
+                  labels.dmSilver }} </label>
+              </p-float-label>
+            </div>
+
+            <div class="form-group field mt-3 col-3">
+              <p-float-label>
+                <p-inputNumber id="metricWetKilograms" mode="decimal" locale="en-US" [minFractionDigits]="2"
+                  [maxFractionDigits]="2" [useGrouping]="false" [min]="0" formControlName="metricWetKilograms"
+                  styleClass="w-full" (onInput)="calculateSolidMetricWetTonnes()" />
+                <label htmlFor="metricWetKilograms" class="text-lg font-bold text-800 required-field"> {{
+                  labels.metricWetKilograms }} </label>
+              </p-float-label>
+            </div>
+
+            <div class="form-group field mt-3 col-3">
+              <p-float-label>
+                <p-inputNumber id="humidityPercentage" mode="decimal" locale="en-US" [minFractionDigits]="2"
+                  [maxFractionDigits]="2" [useGrouping]="false" [min]="0" [max]="100"
+                  formControlName="humidityPercentage" styleClass="w-full"
+                  (onInput)="calculateSolidMetricWetTonnes()" />
+                <label htmlFor="humidityPercentage" class="text-lg font-bold text-800 required-field">
+                  {{ labels.humidityPercentage }} (1 - 100) </label>
+              </p-float-label>
+            </div>
+
+            <div class="form-group field mt-3 col-3">
+              <p-float-label>
+                <div
+                  [ngClass]="['p-2 non-editable-field flex align-items-center justify-content-end', formPercentageLiquidation.value.metricWetKilograms? 'p-inputwrapper-filled': '']">
+                  {{ solidMetricKilograms | formatFieldAmount }}
+                </div>
+                <label class="text-lg font-bold text-800 required-field"> {{ labels.solidMetricKilograms }} </label>
+              </p-float-label>
+            </div>
+
+            <div class="form-group field mt-3 col-3">
+              <p-float-label>
+                <div
+                  [ngClass]="['p-2 non-editable-field flex align-items-center justify-content-end', formPercentageLiquidation.value.metricWetKilograms? 'p-inputwrapper-filled': '']">
+                  {{ solidMetricTonnes | formatFieldAmount }}
+                </div>
+                <label class="text-lg font-bold text-800 required-field"> {{ labels.solidMetricTonnes }} </label>
+              </p-float-label>
+            </div>
+
+            <div class="form-group field col-12 mt-0 p-0 flex justify-content-center">
+              <div class="form-group field mt-3 col-3">
+                <p-float-label>
+                  <div
+                    [ngClass]="['p-2 non-editable-field flex align-items-center justify-content-end', totalImportBs? 'p-inputwrapper-filled': '']">
+                    {{ totalImportBs | formatFieldAmount }}
+                  </div>
+                  <label class="text-lg font-bold text-800 required-field"> {{ labels.totalImport }} </label>
+                </p-float-label>
+              </div>
+            </div>
+
+          </div>
+          <div class="grid flex justify-content-center">
+            <div class="col-7">
+              <h3 class="text-center text-xl font-bold">{{ labels.discounts }}</h3>
+              <table class="mt-2 border-1 border-round border-solid pr-3 py-3 surface-ground">
+                <thead>
+                  <tr>
+                    <th class="w-5 text-lg font-semibold">Concepto</th>
+                    <th class="w-5 text-lg font-semibold">Porcentaje %</th>
+                    <th class="w-2 text-lg font-semibold text-right">Sub Total (Bs)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <h4 class="text-center mr-4">{{ labels.royalties | uppercase}}</h4>
+                    </td>
+                    <td>
+                      <p-inputNumber id="miningRoyalties" mode="decimal" locale="en-US" [minFractionDigits]="2"
+                        [maxFractionDigits]="2" [useGrouping]="false" [min]="limits.minPercent"
+                        [max]="limits.maxPercent" formControlName="miningRoyalties" styleClass="w-full"
+                        (onInput)="calculateDiscounts()" />
+                    </td>
+                    <td class="text-right">
+                      <h4>{{ miningRoyaltiesDiscount | formatFieldAmount }}</h4>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <h4 class="text-center mr-4">{{ labels.comibol }}</h4>
+                    </td>
+                    <td>
+                      <p-inputNumber id="comibol" mode="decimal" locale="en-US" [minFractionDigits]="2"
+                        [maxFractionDigits]="2" [useGrouping]="false" [min]="limits.minPercent"
+                        [max]="limits.maxPercent" formControlName="comibol" styleClass="w-full"
+                        (onInput)="calculateDiscounts()" />
+                    </td>
+                    <td class="text-right">
+                      <h4>{{ comibolDiscount | formatFieldAmount }}</h4>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <h4 class="text-center mr-4">{{ labels.cajaNacional }}</h4>
+                    </td>
+                    <td>
+                      <p-inputNumber id="cajaNacional" mode="decimal" locale="en-US" [minFractionDigits]="2"
+                        [maxFractionDigits]="2" [useGrouping]="false" [min]="limits.minPercent"
+                        [max]="limits.maxPercent" formControlName="cajaNacional" styleClass="w-full"
+                        (onInput)="calculateDiscounts()" />
+                    </td>
+                    <td class="text-right">
+                      <h4>{{ cajaNacionalDiscount | formatFieldAmount }}</h4>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <h4 class="text-center mr-4">{{ labels.fedecomin }}</h4>
+                    </td>
+                    <td>
+                      <p-inputNumber id="fedecomin" mode="decimal" locale="en-US" [minFractionDigits]="2"
+                        [maxFractionDigits]="2" [useGrouping]="false" [min]="limits.minPercent"
+                        [max]="limits.maxPercent" formControlName="fedecomin" styleClass="w-full"
+                        (onInput)="calculateDiscounts()" />
+                    </td>
+                    <td class="text-right">
+                      <h4>{{ fedecominDiscount | formatFieldAmount }}</h4>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <h4 class="text-center mr-4">{{ labels.fencomin }}</h4>
+                    </td>
+                    <td>
+                      <p-inputNumber id="fencomin" mode="decimal" locale="en-US" [minFractionDigits]="2"
+                        [maxFractionDigits]="2" [useGrouping]="false" [min]="limits.minPercent"
+                        [max]="limits.maxPercent" formControlName="fencomin" styleClass="w-full"
+                        (onInput)="calculateDiscounts()" />
+                    </td>
+                    <td class="text-right">
+                      <h4>{{ fencominDiscount | formatFieldAmount }}</h4>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">
+                      <h4 class="my-2">{{ labels.firstAdvance }}</h4>
+                    </td>
+                    <td class="text-center">-</td>
+                    <td class="text-right">
+                      <h4 class="my-2">{{ formPercentageLiquidation.value.firstAdvance?? 0 | formatFieldAmount }}</h4>
+                    </td>
+                  </tr>
+                  <tr class="font-bold text-xl">
+                    <td class="text-right pt-4 pr-3" colspan="2">{{ labels.totalDiscounts }} Bs</td>
+                    <td class="text-right">
+                      {{ totalDiscountsBs | formatFieldAmount }}
+                    </td>
+                  </tr>
+                  <tr class="font-bold text-xl">
+                    <td class="text-right pt-2 pr-3" colspan="2">{{ labels.transportationBonus }} Bs</td>
+                    <td>
+                      <p-inputNumber id="transportationBonus" mode="decimal" locale="en-US" [minFractionDigits]="2"
+                        [maxFractionDigits]="2" [useGrouping]="false" [min]="0" formControlName="transportationBonus"
+                        styleClass="w-full" (onInput)="calculateTotals()" />
+                    </td>
+                  </tr>
+                  <tr class="font-bold text-xl">
+                    <td class="text-right pt-2 pr-3" colspan="2">{{ labels.liquidPayable }} Bs</td>
+                    <td class="text-right">
+                      {{ liquidPayableBs | formatFieldAmount }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <div class="p-2 pb-3">
+            <button type="button" pButton pRipple [label]="buttons.cancel" icon="pi pi-times" severity="secondary"
+              [rounded]="true" size="small" class="mr-2 shadow-3" (click)="hideModal()"></button>
+            <button pButton pRipple [label]="buttons.save" icon="pi pi-check" [rounded]="true" size="small"
+              class="mr-2 shadow-3 hover-primary" (click)="saveLiquidation()"
+              [disabled]="formPercentageLiquidation.invalid">
+            </button>
+          </div>
+        </ng-template>
+      </p-dialog>
+    </div>
+  </div>
+</form>
