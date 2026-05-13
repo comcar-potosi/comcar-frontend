@@ -10,6 +10,7 @@
                 <div class="sombra-black border-round-xl p-2 surface-0">
                     <app-toolbar-common
                         [serviceGeneric]="companyService" 
+                        [showDelete]="false"
                         [object]="selectedCompany"/> 
                     <app-modal-form ></app-modal-form> 
                     <app-modal-delete [serviceGeneric]="companyService" [objectId]="selectedCompany?.id"></app-modal-delete>
