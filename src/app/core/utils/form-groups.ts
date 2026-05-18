@@ -138,7 +138,6 @@ export class FormUtils {
             noSpaceValidator,
          ]),
          documentNumber: new FormControl<string>('', [
-            Validators.required,
             Validators.pattern(regex.fieldDocument),
             Validators.minLength(LIMITS.minLengthDocument),
             noSpaceValidator,

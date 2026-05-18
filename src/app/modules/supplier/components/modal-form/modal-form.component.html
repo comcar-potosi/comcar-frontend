@@ -49,10 +49,6 @@
               <label htmlFor="documentNumber" class="text-lg font-bold text-800 required-field"> {{ labels.docNumber }}
               </label>
             </p-float-label>
-            @if (formSupplier.controls['documentNumber'].touched &&
-            formSupplier.get('documentNumber')?.hasError('required')) {
-            <small class="p-error block mt-2"> {{ messages.requiredField }} </small>
-            }
             @if (formSupplier.get('documentNumber')?.hasError('pattern')) {
             <small class="p-error block mt-2">{{ messages.deniedCharactersDocument }}</small>
             }
