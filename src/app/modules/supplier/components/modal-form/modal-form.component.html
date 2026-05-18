@@ -46,7 +46,7 @@
           <div class="form-group field mt-5">
             <p-float-label>
               <input type="text" pInputText id="documentNumber" formControlName="documentNumber" class="w-full" />
-              <label htmlFor="documentNumber" class="text-lg font-bold text-800 required-field"> {{ labels.docNumber }}
+              <label htmlFor="documentNumber" class="text-lg font-bold text-800"> {{ labels.docNumber }}
               </label>
             </p-float-label>
             @if (formSupplier.get('documentNumber')?.hasError('pattern')) {
