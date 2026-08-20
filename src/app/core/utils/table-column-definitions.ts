@@ -20,7 +20,7 @@ export class TableColumnDefinitions {
       return [
          {
             field: 'code',
-            header: LABELS.code,
+            header: LABELS.amount,
             columnType: TableColumnType.TEXT,
          },
          {
